@@ -15,6 +15,7 @@ Skynet2.playerlist = {
 
 
 function Skynet2.playerlist:update(data)
+
     -- we clear every time and let the server manage it
     self.ui_list = {}
 
@@ -30,10 +31,10 @@ function Skynet2.playerlist:update(data)
 
     -- we build a lists for each sector
     for sector in pairs(data.playerlist) do
-        if sector ~= current_sector then
+        --if sector ~= current_sector then -- uncomment to show the sector you are in
             self.ui_list[sector] = data.playerlist[sector]
             self.need_ui_update = true
-        end
+        --end
     end
 
     Skynet2.playerlist:ui_update()
@@ -108,7 +109,11 @@ function Skynet2.playerlist:ui_update()
 
             for _,player in ipairs(self.ui_list[sector]) do
                 --print(sector..": "..player.name)
-                list_box:append(iup.label { title = player.factionColor.."["..player.guild.."]"..player.name.." \127666666"..player.ship })
+                list_box:append(iup.label {
+                    font  = Font.H3*HUD_SCALE*.75,
+                    title = player.factionColor.."["..player.guild.."]"..player.name.." \127666666"..player.ship
+
+                    })
             end
 
             Skynet2.ui.spotbox:append(list_box)

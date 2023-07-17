@@ -25,10 +25,19 @@ Skynet2.LoadSettings = function()
     Skynet2.Settings = unspickle(LoadSystemNotes(Skynet2.SettingsId))
 end
 
+Skynet2.printerror = function(str)
+    print("\127FF7E00Skynet\1270080FF | \127FF0001" .. str)
+end
+
 Skynet2.print = function(str)
+    print("\127FF7E00Skynet\1270080FF | \127dddddd" .. str)
+end
+
+Skynet2.printHUD = function(str)
     pcall(function() HUD:PrintSecondaryMsg("\127FF7E00Skynet\1270080FF | \127dddddd" .. str) end)
 end
 
-Skynet2.printerror = function(str)
+Skynet2.printerrorHUD = function(str)
     pcall(function() HUD:PrintSecondaryMsg("\127FF7E00Skynet\1270080FF | \127FF0001" .. str) end)
 end
+

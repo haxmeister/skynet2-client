@@ -25,120 +25,51 @@ Skynet2.cli.Dispatch = function(_, args)
 end
 
 ----done
---Skynet2.cli["connect"] = function(args)
-    --Skynet2.TCPConn.connect()
---end
+Skynet2.cli["connect"] = function(args)
+    Skynet2.coms.connect()
+end
 
 ----done
---Skynet2.cli["disconnect"] = function(args)
-    --Skynet2.TCPConn.Disconnect()
---end
+Skynet2.cli["disconnect"] = function(args)
+    Skynet2.coms.disconnect()
+end
 
---Skynet2.cli["config"] = function(args)
-    --ShowDialog(Skynet2.UI.SettingsWindow)
---end
+-- accepts username and password
+Skynet2.cli["register"] = function(args)
+    if args[2] and args[3] then
+        Skynet2.coms.register(args[2], args[3])
+    else
+        Skynet2.printerror("missing arguments in register command")
+    end
+end
 
-----done
---Skynet2.cli["listpayment"] = function(args)
-    --Skynet2.TCPConn.SendData({ action='listpayment'})
---end
+Skynet2.cli["invite"] = function(args)
+    if args[2] then
+        Skynet2.coms.invite(args[2])
+    else
+        Skynet2.printerror("missing arguments in invite command")
+    end
+end
 
-----done
---Skynet2.cli["listkos"] = function(args)
-    --Skynet2.TCPConn.SendData({ action='listkos'})
---end
+Skynet2.cli["join"] = function(args)
+    if args[2] then
+        Skynet2.coms.join(args[2])
+    else
+        Skynet2.printerror("missing argument in join command")
+    end
+end
 
-----done
---Skynet2.cli["listallies"] = function(args)
-    --Skynet2.TCPConn.SendData({ action='listallies'})
---end
+Skynet2.cli["login"] = function(args)
+    if args[2] and args[3] then
+        Skynet2.print(args[2].." : "..args[3])
+        Skynet2.coms.login(args[2], args[3])
+        Skynet2.Settings.username = args[2]
+        Skynet2.Settings.password = args[3]
+        Skynet2.SaveSettings()
+    else
+        Skynet2.printerror("missing arguments in login command")
+    end
+end
 
-----done
---Skynet2.cli["list"] = function(args)
-    --Skynet2.TCPConn.SendData({ action='list'})
---end
 
-----done
---Skynet2.cli["addpayment"] = function(args)
-    --if (args[2]==nil or args[3]==nil) then
-        --Skynet2.printerror("Missing parameters for command - " .. args[1])
-        --return
-    --end
-    --local name = substitute_vars(args[2])
-    --Skynet2.TCPConn.SendData({ action='addpayment', name=name, length=args[3] })
---end
-
-----done
---Skynet2.cli["removepayment"] = function(args)
-    --if (args[2]==nil) then
-        --Skynet2.printerror("Missing parameters for command - " .. args[1])
-        --return
-    --end
-    --local name = substitute_vars(args[2])
-    --Skynet2.TCPConn.SendData({ action='removepayment', name=name})
---end
-
-----done
---Skynet2.cli["addkos"] = function(args)
-    --if (args[2]==nil) then
-        --Skynet2.printerror("Missing parameters for command - " .. args[1])
-        --return
-    --end
-    --local name = substitute_vars(args[2])
-    --local len = args[3] or "0"
-    --local note = args[4] or ""
-    --Skynet2.TCPConn.SendData({ action='addkos', name=name, length=len, notes=note})
---end
-
-----done
---Skynet2.cli["removekos"] = function(args)
-    --if (args[2]==nil) then
-        --Skynet2.printerror("Missing parameters for command - " .. args[1])
-        --return
-    --end
-    --local name = substitute_vars(args[2])
-    --Skynet2.TCPConn.SendData({ action='removekos', name=name})
---end
-
-----done
---Skynet2.cli["addally"] = function(args)
-    --if (args[2]==nil) then
-        --Skynet2.printerror("Missing parameters for command - " .. args[1])
-        --return
-    --end
-    --local name = substitute_vars(args[2])
-    --Skynet2.TCPConn.SendData({ action='addally', name=name})
---end
-
-----done
---Skynet2.cli["removeally"] = function(args)
-    --if (args[2]==nil) then
-        --Skynet2.printerror("Missing parameters for command - " .. args[1])
-        --return
-    --end
-    --local name = substitute_vars(args[2])
-    --Skynet2.TCPConn.SendData({ action='removeally', name=name })
---end
-
-----done
---Skynet2.cli["adduser"] = function(args)
-    --Skynet2.UI.adduser.dialog:show()
---end
-
---Skynet2.cli["removeuser"] = function(args)
-    --if (args[2]==nil) then
-        --Skynet2.printerror("Adduser command need 1 parameters: username")
-    --else
-        --Skynet2.TCPConn.SendData({ action='removeuser', username=args[2] })
-    --end
---end
-
---Skynet2.cli["clearspots"] = function(args)
-    --Skynet2.ClearSpots()
---end
-
---Skynet2.cli["help"] = function(args)
-    --Skynet2.ShowHelp()
---end
-
---RegisterUsercli('Skynet2', Skynet2.cli.Dispatch)
+RegisterUserCommand('Skynet2', Skynet2.cli.Dispatch)

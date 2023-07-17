@@ -27,7 +27,7 @@ function Skynet2.coms.onMessage( sock, msg )
     if (Skynet2.server_messages[action]) then
         Skynet2.server_messages[action](data)
     else
-        Skynet2.printerror("Recieved bad message from server")
+        Skynet2.printerrorHUD("Recieved bad message from server")
     end
 end
 
@@ -48,7 +48,7 @@ function Skynet2.coms.onConnect( sock, errmsg )
         Skynet2.coms.isconnected = true
         Skynet2.coms.isloggedin = false
         Skynet2.coms.connect_attempts = 0
-        Skynet2.print("Connected to server ok.")
+        Skynet2.printHUD("Connected to server ok.")
         Skynet2.coms.login()
     else
         Skynet2.coms.isconnected = false
@@ -56,14 +56,14 @@ function Skynet2.coms.onConnect( sock, errmsg )
 
         if Skynet2.coms.connect_attempts == 0 then
             if (errmsg) then
-                Skynet2.printerror("Error connecting to server: " .. errmsg)
+                Skynet2.printerrorHUD("Error connecting to server: " .. errmsg)
                 return
             else
-                Skynet2.printerror("Error connecting to server.")
+                Skynet2.printerrorHUD("Error connecting to server.")
                 return
             end
         end
-        Skynet2.printerror("failed to connect")
+        Skynet2.printerrorHUD("failed to connect")
     end
 end
 
@@ -80,7 +80,7 @@ function Skynet2.coms.onDisconnect( sock )
     local timeout = (Skynet2.coms.connect_attempts < 5) and 5 or 60
     Skynet2.coms.reconnect_timer:SetTimeout(timeout * 1000, reconnect_cb)
 
-    Skynet2.printerror("Disconnected from server. Reconnecting in "..tostring(timeout).."s.")
+    Skynet2.printerrorHUD("Disconnected from server. Reconnecting in "..tostring(timeout).."s.")
 end
 
 
@@ -108,19 +108,20 @@ function Skynet2.coms.disconnect()
         Skynet2.coms.socket = nil
     end
 
-    Skynet2.printerror("Disconnected from the server");
+    Skynet2.printerrorHUD("Disconnected from the server");
 end
 
 function Skynet2.coms.connect()
-    console_print("coms.connect called")
+    --console_print("coms.connect called")
     Skynet2.coms.reconnect_timer:Kill()
 
     if (Skynet2.coms.isconnected) then
-        Skynet2.coms.socket.tcp:Disconnect()
+        --Skynet2.coms.socket.tcp:Disconnect()
+        Skynet2.coms.disconnect()
     end
 
     if Skynet2.coms.connect_attempts == 0 then
-        Skynet2.print("Trying to connect to server...")
+        Skynet2.printHUD("Trying to connect to server...")
     end
 
     Skynet2.coms.socket = TCP.make_client(
@@ -156,8 +157,8 @@ end
 -- login message
 function Skynet2.coms.login()
     local msg_ref = com.new('login')
-    msg_ref.username = 'joshua'--Skynet2.settings.username or ''
-    msg_ref.password = 'mypass'--Skynet2.settings.password or ''
+    msg_ref.username = Skynet2.Settings.username or ''
+    msg_ref.password = Skynet2.Settings.password or ''
     Skynet2.coms.send(msg_ref)
 end
 
@@ -168,13 +169,49 @@ function Skynet2.coms.playerseen(playerlist)
     Skynet2.coms.send(msg_ref)
 end
 
--- chat channel message
+-- send a chat channel message
 function Skynet2.coms.chat(msg)
     local msg_ref = com.new('chat')
-    msg_ref.message = msg
+    msg_ref.text = msg
     Skynet2.coms.send(msg_ref)
 end
 
+-- scanned roid message
+function Skynet2.coms.scan(msg)
+    local msg_ref = com.new('scan')
+    msg_ref.data = msg
+    Skynet2.coms.send(msg_ref)
+end
+
+-- create and join new chat channel
+function Skynet2.coms.newChannel(name)
+    local msg_ref = com.new('newChannel')
+    msg_ref.name = name
+    Skynet2.coms.send(msg_ref)
+end
+
+-- create an account on server
+function Skynet2.coms.register(username, password)
+    local msg_ref = com.new('register')
+    msg_ref.username = username
+    msg_ref.password = password
+    Skynet2.coms.send(msg_ref)
+end
+
+-- invite a player to your alliance
+function Skynet2.coms.invite(username)
+    local msg_ref = com.new('invite')
+    msg_ref.username = username
+    Skynet2.coms.send(msg_ref)
+end
+
+-- join an alliance
+function Skynet2.coms.join(alliance)
+    local msg_ref = com.new('join')
+    msg_ref.alliance = alliance
+    msg_ref.username = Skynet2.Settings.username or ''
+    Skynet2.coms.send(msg_ref)
+end
 
 RegisterEvent(Skynet2.coms.disconnect, "UNLOAD_INTERFACE")
 RegisterEvent(Skynet2.coms.disconnect, "PLAYER_LOGGED_OUT")

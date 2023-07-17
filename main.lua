@@ -3,12 +3,12 @@ Skynet2
 Version 2.0
 
 Author:   haxmeister (Joshua S. Day)
-Purpose:  A universally useable plugin for guilds
+Purpose:  A universally usable plugin for alliances
 Required: This plugin must connect to the associated server software.
 
 License:  free for use/copy/modification/and redistribution
-          with latest MIT license 2022 https://mit-license.org/
-Addendum: nerd cred required, please mention the name of the authors
+          with latest MIT license 2023 https://mit-license.org/
+          please mention the name of the authors
           who's code you have modified if you make your own mod
 ]]
 
@@ -21,6 +21,7 @@ Skynet2 = Skynet2 or {
         port     = 8181
     },
 }
+
 
 -- Load necessary library files
 dofile("support_funcs.lua")  -- functions to make programming easier
@@ -46,19 +47,6 @@ function Skynet2.alliancetarget()
         Skyne2.AllianceChannel("target",datatable)
     end
 end
-
-Skynet2.PlayerEnteredGame = function()
-    Skynet2.print("Skynet loaded...")
-    Skynet2.LoadSettings()
-
-    -- wait ten seconds before trying to send login credentials
-    --local timer1 = Timer()
-    --Skynet2.coms.login()
-
-
-end
-
-RegisterEvent(Skynet2.PlayerEnteredGame, "PLAYER_ENTERED_GAME")
 
 -- create a command to send data about target to alliance chat
 RegisterUserCommand('alliancetarget', Skynet2.alliancetarget)
