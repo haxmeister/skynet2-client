@@ -8,11 +8,26 @@ Skynet2.playerlist = {
     ['ui_list']= {}, -- to contain remote player objects keyed by sector shortname
     ['local_list'] = {}, -- player objects from this sector keyed by sector
     ['timer']      = Timer(),
-    ['ui_update_timer']   = Timer(),
+    ['idle_timer']   = Timer(),
+    ['last_report']  = '',
     ['sendDelay']  = 2000,   -- milliseconds to wait between sends
     ['sector_timers'] = {}  -- timers for each sector keyed by sector shortname
 }
 
+-- this timer is to initialize an update of players in sector
+-- if the player has been idle in station since they will stop getting events
+Skynet2.playerlist.idle_timer:SetTimeout(60000,
+    function()
+        if ( (os.time() - Skynet2.playerlist.last_report) > 60) then
+            Skynet2.playerlist:report()
+        end
+
+        if Skynet2.playerlist.idle_timer:IsActive()  then
+            Skynet2.playerlist.idle_timer:Kill()
+        end
+        Skynet2.playerlist.idle_timer:SetTimeout(60000)
+    end
+)
 
 function Skynet2.playerlist:update(data)
 
@@ -48,7 +63,7 @@ function Skynet2.playerlist:send_list()
 end
 
 function Skynet2.playerlist:report()
-
+    Skynet2.playerlist.last_report = os.time()
     -- here we skip if the timer is already running
     -- this allows us to use the same function for the player_entered_sector
     -- event as well as the sector_changed event without sending too frequently
@@ -111,7 +126,7 @@ function Skynet2.playerlist:ui_update()
                 --print(sector..": "..player.name)
                 list_box:append(iup.label {
                     font  = Font.H3*HUD_SCALE*.75,
-                    title = player.factionColor.."["..player.guild.."]"..player.name.." \127666666"..player.ship
+                    title = player.factionColor.."["..player.guild.."]"..player.name.." \127666666"..player.shipAbbr.."  "
 
                     })
             end

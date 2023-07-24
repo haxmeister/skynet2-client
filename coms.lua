@@ -183,13 +183,6 @@ function Skynet2.coms.scan(msg)
     Skynet2.coms.send(msg_ref)
 end
 
--- create and join new chat channel
-function Skynet2.coms.newChannel(name)
-    local msg_ref = com.new('newChannel')
-    msg_ref.name = name
-    Skynet2.coms.send(msg_ref)
-end
-
 -- create an account on server
 function Skynet2.coms.register(username, password)
     local msg_ref = com.new('register')
@@ -201,15 +194,21 @@ end
 -- invite a player to your alliance
 function Skynet2.coms.invite(username)
     local msg_ref = com.new('invite')
-    msg_ref.username = username
+    msg_ref.username = tostring(username)
     Skynet2.coms.send(msg_ref)
 end
 
--- join an alliance
+-- join an alliance you have been invited too
 function Skynet2.coms.join(alliance)
     local msg_ref = com.new('join')
-    msg_ref.alliance = alliance
-    msg_ref.username = Skynet2.Settings.username or ''
+    msg_ref.alliance = tostring(alliance)
+    Skynet2.coms.send(msg_ref)
+end
+
+-- create a new alliance by tag name
+function Skynet2.coms.newalliance(tag)
+    local msg_ref = com.new('newalliance')
+    msg_ref.newalliancetag = tostring(tag)
     Skynet2.coms.send(msg_ref)
 end
 

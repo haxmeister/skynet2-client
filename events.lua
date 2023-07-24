@@ -96,7 +96,7 @@ end
 
 function Skynet2.events:SKYNET2_CHAT_RECEIVED(event,data)
     if data.text ~= nil then
-        print("\12737c8ab("..data.channel..") "..data.sender.sectorfactioncolor.."<"..data.sender.sectorabbr..">[ "..data.sender.guildabbr.."]"..data.sender.factioncolor..data.sender.charname.."\12737c8ab " .. data.text)
+        print("\12737c8ab("..data.channel..")<"..data.sender.sectorabbr..">[ "..data.sender.guildabbr.."] "..data.sender.factioncolor..data.sender.charname.."\12737c8ab " .. data.text)
     end
 end
 

@@ -71,5 +71,13 @@ Skynet2.cli["login"] = function(args)
     end
 end
 
+Skynet2.cli["newalliance"] = function(args)
+        if args[2] then
+        Skynet2.coms.newalliance(args[2])
+    else
+        Skynet2.printerror("missing argument in newalliance command")
+    end
+end
+
 
 RegisterUserCommand('Skynet2', Skynet2.cli.Dispatch)
