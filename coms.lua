@@ -212,5 +212,39 @@ function Skynet2.coms.newalliance(tag)
     Skynet2.coms.send(msg_ref)
 end
 
+-- invite a player to the alliance
+function Skynet2.coms.invite(charname)
+    local msg_ref = com.new('invite')
+    msg_ref.charname = tostring(charname)
+    Skynet2.coms.send(msg_ref)
+end
+
+-- uninvite a player from the alliance
+function Skynet2.coms.uninvite(charname)
+    local msg_ref = com.new('uninvite')
+    msg_ref.charname = tostring(charname)
+    Skynet2.coms.send(msg_ref)
+end
+
+-- uninvite a player from the alliance
+function Skynet2.coms.promote(charname)
+    local msg_ref = com.new('promote')
+    msg_ref.charname = tostring(charname)
+    Skynet2.coms.send(msg_ref)
+end
+
+-- join an alliance you have been invited too
+function Skynet2.coms.join(alliance)
+    local msg_ref = com.new('join')
+    msg_ref.alliance = tostring(alliance)
+    Skynet2.coms.send(msg_ref)
+end
+
+-- get a list of alliance members online
+function Skynet2.coms.online()
+    local msg_ref = com.new('online')
+    Skynet2.coms.send(msg_ref)
+end
+
 RegisterEvent(Skynet2.coms.disconnect, "UNLOAD_INTERFACE")
 RegisterEvent(Skynet2.coms.disconnect, "PLAYER_LOGGED_OUT")
